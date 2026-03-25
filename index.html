@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TH Link — IT & Software Solutions</title>
+<link rel="icon" type="image/png" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -21,17 +22,18 @@ nav {
   padding: 1.5rem 4rem;
   display: flex; align-items: center; justify-content: space-between;
   transition: background 0.4s, box-shadow 0.4s;
+  background: rgba(255,255,255,0.96); box-shadow: 0 1px 0 rgba(0,0,0,0.08); backdrop-filter: blur(12px);
 }
-nav.scrolled { background: rgba(255,255,255,0.96); box-shadow: 0 1px 0 rgba(0,0,0,0.08); backdrop-filter: blur(12px); }
-.logo { font-family: 'Exo 2', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.05em; color: var(--white); transition: color 0.4s; text-decoration: none; }
-nav.scrolled .logo { color: var(--black); }
+nav.on-hero { background: transparent; box-shadow: none; backdrop-filter: none; }
+.logo { font-family: 'Exo 2', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 0.05em; color: var(--black); transition: color 0.4s; text-decoration: none; }
+nav.on-hero .logo { color: var(--white); }
 .logo span { color: var(--gold); }
 .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-.nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; }
-nav.scrolled .nav-links a { color: var(--gray); }
-.nav-links a:hover, nav.scrolled .nav-links a:hover { color: var(--gold); }
-.nav-cta { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--white); border: 1px solid rgba(255,255,255,0.4); padding: 0.55rem 1.25rem; transition: all 0.3s; }
-nav.scrolled .nav-cta { color: var(--black); border-color: rgba(0,0,0,0.3); }
+.nav-links a { color: var(--gray); text-decoration: none; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; }
+nav.on-hero .nav-links a { color: rgba(255,255,255,0.75); }
+.nav-links a:hover { color: var(--gold); }
+.nav-cta { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--black); border: 1px solid rgba(0,0,0,0.25); padding: 0.55rem 1.25rem; transition: all 0.3s; }
+nav.on-hero .nav-cta { color: var(--white); border-color: rgba(255,255,255,0.4); }
 .nav-cta:hover { background: var(--gold); border-color: var(--gold); color: var(--white) !important; }
 
 #home { min-height: 100vh; background: var(--dark); position: relative; display: flex; align-items: flex-end; padding: 0 4rem 5rem; overflow: hidden; }
@@ -201,7 +203,7 @@ footer ul li a:hover { color: var(--gold); }
       <a href="#contact" class="btn-ghost">Contact Us</a>
     </div>
   </div>
-  <div class="hero-scroll">Scroll</div>
+  <div class="hero-scroll" style="display:none;"></div>
 </section>
 
 <section id="about">
@@ -433,4 +435,20 @@ footer ul li a:hover { color: var(--gold); }
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-c
+const nav = document.getElementById('nav');
+const hero = document.getElementById('home');
+const observer = new IntersectionObserver(([entry]) => {
+  nav.classList.toggle('on-hero', entry.isIntersecting);
+}, { threshold: 0.1 });
+observer.observe(hero);
+document.querySelectorAll('.fq').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.fitem').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
