@@ -5,6 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>THLink — Tot transportul tău, într-un singur loc</title>
 <meta name="description" content="Comenzi, facturi cu e-Factura, flotă și documente procesate cu AI — organizate, conectate și ușor de urmărit.">
+<!--
+  ════════════════════════════════════════════════════════════════════
+  THLink — pagina de prezentare (HTML + CSS + JS, un singur fișier)
+
+  Ce poți personaliza rapid:
+   • Linkul de autentificare:  caută  https://app.thlink.ro/login
+   • Numărul de telefon:       caută  tel:+40000000000
+   • Poza reală de camion:     pune un fișier  hero-truck.png  lângă
+     acest HTML (vedere laterală, fundal transparent) — se afișează
+     automat în locul siluetei desenate.
+   • Logo: e încorporat direct în fișier (base64) — dacă vrei să-l
+     schimbi, caută  const LOGO  în partea de JavaScript.
+   • Emailul pe care primești mesajele din formularul de contact:
+     caută  const CONTACT_EMAIL  în partea de JavaScript. La primul
+     mesaj trimis, FormSubmit îți dă un email de confirmare — apasă
+     „Activate" o singură dată și după aceea totul merge automat.
+  ════════════════════════════════════════════════════════════════════
+-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -234,6 +252,32 @@ section[id]{scroll-margin-top:88px}
 .cta-box .btn{margin-top:28px;padding:12px 24px}
 .cta-box .btn-white:hover{background:#f3f4f6}
 
+/* ── Contact ──────────────────────────────────────────────────────── */
+.contact-box{border-radius:16px;background:#1a1a1a;color:#fff;padding:40px 24px;display:grid;grid-template-columns:1fr;gap:40px}
+@media(min-width:640px){.contact-box{padding:48px}}
+@media(min-width:1024px){.contact-box{grid-template-columns:1fr 1fr;gap:56px}}
+.contact-info h2{font-size:24px;font-weight:700}
+@media(min-width:640px){.contact-info h2{font-size:30px}}
+.contact-info>p{margin-top:12px;color:#d1d5db;line-height:1.6}
+.contact-lines{margin-top:24px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.contact-line{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:500;color:#e5e7eb;transition:color .15s}
+.contact-line:hover{color:#a3e635}
+.contact-line svg{color:#a3e635}
+.contact-form{display:flex;flex-direction:column;gap:14px}
+.cf-row{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:640px){.cf-row{grid-template-columns:1fr 1fr}}
+.cf-field{display:flex;flex-direction:column;gap:6px}
+.cf-field label{font-size:12px;font-weight:600;color:#9ca3af}
+.cf-field input,.cf-field textarea{width:100%;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font:inherit;font-size:14px;outline:none;transition:border-color .15s}
+.cf-field input::placeholder,.cf-field textarea::placeholder{color:#6b7280}
+.cf-field input:focus,.cf-field textarea:focus{border-color:#a3e635}
+.cf-field textarea{resize:vertical;min-height:96px}
+.contact-form .btn{align-self:flex-start}
+.contact-form .btn:disabled{opacity:.6;cursor:not-allowed}
+.cf-status{font-size:13px;min-height:18px}
+.cf-status.ok{color:#a3e635}
+.cf-status.err{color:#fca5a5}
+
 /* ── Footer ───────────────────────────────────────────────────────── */
 .site-footer{padding:24px 20px;border-top:1px solid #e5e7eb}
 @media(min-width:640px){.site-footer{padding:24px 32px}}
@@ -290,6 +334,7 @@ section[id]{scroll-margin-top:88px}
       </nav>
       <div class="header-actions">
         <a href="tel:+40000000000" class="phone-btn" aria-label="Sună-ne"><i data-icon="phone" data-size="15"></i></a>
+        <a href="https://app.thlink.ro/login" class="btn btn-white btn-sm">Autentificare</a>
         <a href="#contact" class="btn btn-lime btn-sm">Contact</a>
       </div>
     </div>
@@ -431,12 +476,41 @@ section[id]{scroll-margin-top:88px}
     </div>
   </section>
 
-  <!-- ── CTA final ───────────────────────────────────────────────────── -->
+  <!-- ── Contact + CTA final ─────────────────────────────────────────── -->
   <section id="contact" class="container cta-section">
-    <div class="cta-box">
-      <h2>Gata de pornire?</h2>
-      <p>Autentifică-te și gestionează-ți transportul dintr-un singur loc.</p>
-      <a href="https://app.thlink.ro/login" class="btn btn-white">Autentificare <i data-icon="arrow-right" data-size="16"></i></a>
+    <div class="contact-box">
+      <div class="contact-info">
+        <h2>Hai să vorbim</h2>
+        <p>Îți arătăm platforma în 15 minute, pe un cont demo gratuit, pe datele firmei tale. Scrie-ne sau sună-ne — răspundem rapid.</p>
+        <div class="contact-lines">
+          <a href="tel:+40000000000" class="contact-line"><i data-icon="phone" data-size="16"></i> +40 000 000 000</a>
+          <a href="#" class="contact-line" data-contact-mail></a>
+        </div>
+        <a href="https://app.thlink.ro/login" class="btn btn-ghost" style="margin-top:28px">Ai deja cont? Autentificare <i data-icon="arrow-right" data-size="16"></i></a>
+      </div>
+      <form id="contactForm" class="contact-form" novalidate>
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="cf-row">
+          <div class="cf-field">
+            <label for="cfName">Nume</label>
+            <input id="cfName" name="nume" type="text" required placeholder="Numele tău">
+          </div>
+          <div class="cf-field">
+            <label for="cfPhone">Telefon</label>
+            <input id="cfPhone" name="telefon" type="tel" placeholder="07xx xxx xxx">
+          </div>
+        </div>
+        <div class="cf-field">
+          <label for="cfEmail">Email</label>
+          <input id="cfEmail" name="email" type="email" required placeholder="adresa@firma.ro">
+        </div>
+        <div class="cf-field">
+          <label for="cfMsg">Mesaj</label>
+          <textarea id="cfMsg" name="mesaj" rows="4" required placeholder="Ex: Avem o firmă cu 12 camioane și am vrea un demo."></textarea>
+        </div>
+        <button type="submit" class="btn btn-lime" id="cfSubmit">Trimite mesajul <i data-icon="arrow-right" data-size="16"></i></button>
+        <p class="cf-status" id="cfStatus"></p>
+      </form>
     </div>
   </section>
 </main>
@@ -483,6 +557,7 @@ const ICONS = {
   'x': '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
   'quote': '<path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/>',
   'shield-question': '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+  'mail': '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
   'phone': '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
   'warehouse': '<path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35a2 2 0 0 1 1.26-1.85l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/><path d="M6 22V11a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v11"/><path d="M6 18h12"/><path d="M6 14h12"/>',
 };
@@ -892,6 +967,51 @@ const favicon = document.createElement('link');
 favicon.rel = 'icon';
 favicon.href = LOGO;
 document.head.appendChild(favicon);
+
+/* ══ Formular de contact — trimite email prin FormSubmit ═══════════ */
+/* Schimbă adresa de mai jos cu cea pe care vrei să primești mesajele.
+   La PRIMUL mesaj trimis, FormSubmit îți trimite un email de
+   confirmare — apasă „Activate" o dată și gata. */
+const CONTACT_EMAIL = 'contact@thlink.ro';
+
+document.querySelectorAll('[data-contact-mail]').forEach(a => {
+  a.href = 'mailto:' + CONTACT_EMAIL;
+  a.innerHTML = icon('mail', 16) + ' ' + CONTACT_EMAIL;
+});
+
+const contactForm = document.getElementById('contactForm');
+const cfStatus = document.getElementById('cfStatus');
+const cfSubmit = document.getElementById('cfSubmit');
+
+contactForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!contactForm.reportValidity()) return;
+  cfSubmit.disabled = true;
+  cfSubmit.textContent = 'Se trimite…';
+  cfStatus.textContent = '';
+  cfStatus.className = 'cf-status';
+  try {
+    const data = Object.fromEntries(new FormData(contactForm).entries());
+    data._subject = 'Mesaj nou de pe pagina THLink';
+    data._template = 'table';
+    data._captcha = 'false';
+    const res = await fetch('https://formsubmit.co/ajax/' + CONTACT_EMAIL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('trimitere eșuată');
+    contactForm.reset();
+    cfStatus.textContent = 'Mesaj trimis! Îți răspundem cât de repede putem.';
+    cfStatus.classList.add('ok');
+  } catch (err) {
+    cfStatus.textContent = 'Nu s-a putut trimite. Scrie-ne direct la ' + CONTACT_EMAIL + '.';
+    cfStatus.classList.add('err');
+  } finally {
+    cfSubmit.disabled = false;
+    cfSubmit.innerHTML = 'Trimite mesajul ' + icon('arrow-right', 16);
+  }
+});
 
 /* anul curent în footer */
 document.getElementById('year').textContent = new Date().getFullYear();
