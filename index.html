@@ -1,471 +1,907 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1JW2FKLVY9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<title>THLink — Tot transportul tău, într-un singur loc</title>
+<meta name="description" content="Comenzi, facturi cu e-Factura, flotă și documente procesate cu AI — organizate, conectate și ușor de urmărit.">
+<!--
+  ════════════════════════════════════════════════════════════════════
+  THLink — pagina de prezentare (HTML + CSS + JS, un singur fișier)
 
-  gtag('config', 'G-1JW2FKLVY9');
-</script>
-<title>THLink — IT & Software Solutions</title>
-<link rel="icon" type="image/png" href="favicon.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  Ce poți personaliza rapid:
+   • Linkul de autentificare:  caută  https://app.thlink.ro/login
+   • Numărul de telefon:       caută  tel:+40000000000
+   • Poza reală de camion:     pune un fișier  hero-truck.png  lângă
+     acest HTML (vedere laterală, fundal transparent) — se afișează
+     automat în locul siluetei desenate.
+   • Logo: caută  .logo-mark  (acum e un pătrat cu „TH”; poți pune
+     un <img> cu logo-ul tău în locul lui).
+  ════════════════════════════════════════════════════════════════════
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-:root {
-  --gold: #C9A84C; --gold2: #a88530;
-  --black: #111; --dark: #181818;
-  --white: #ffffff; --off: #f7f6f3;
-  --gray: #888; --light: #e8e6e0; --text: #222;
-  --pad: clamp(1.25rem, 5vw, 4rem);
+/* ── Reset & bază ─────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#111827;background:#fff;line-height:1.5;-webkit-font-smoothing:antialiased}
+img,svg{display:block}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+section[id]{scroll-margin-top:88px}
+.container{max-width:1152px;margin:0 auto;padding:0 20px}
+@media(min-width:640px){.container{padding:0 32px}}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeIn .4s ease}
+@keyframes tabbar{from{width:0}to{width:100%}}
+
+/* ── Butoane ──────────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;font-size:14px;font-weight:600;border-radius:8px;transition:background .15s,color .15s}
+.btn-white{background:#fff;color:#1a1a1a}.btn-white:hover{background:rgba(255,255,255,.9)}
+.btn-lime{background:#a3e635;color:#000}.btn-lime:hover{background:#bef264}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25)}.btn-ghost:hover{background:rgba(255,255,255,.2)}
+.btn-dark{background:#1a1a1a;color:#fff}.btn-dark:hover{background:#2c2c2c}
+.btn-sm{padding:8px 14px}
+
+/* ── Header plutitor ──────────────────────────────────────────────── */
+.site-header{position:fixed;top:12px;left:0;right:0;z-index:40;padding:0 12px}
+@media(min-width:640px){.site-header{top:16px}}
+.header-pill{max-width:1024px;margin:0 auto;border-radius:16px;background:rgba(0,0,0,.3);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}
+@media(min-width:640px){.header-inner{padding:10px 20px}}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:#1a1a1a;color:#a3e635;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:-.5px}
+.logo-name{font-size:16px;font-weight:700;letter-spacing:-.02em;color:#fff}
+.header-nav{display:none;align-items:center;gap:4px;font-size:14px}
+@media(min-width:768px){.header-nav{display:flex}}
+.header-nav a{padding:6px 12px;font-weight:500;color:rgba(255,255,255,.8);transition:color .15s}
+.header-nav a:hover{color:#fff}
+.header-actions{display:flex;align-items:center;gap:8px}
+.phone-btn{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9);transition:background .15s}
+.phone-btn:hover{background:rgba(255,255,255,.1)}
+@media(min-width:640px){.phone-btn{display:inline-flex}}
+
+/* ── Hero ─────────────────────────────────────────────────────────── */
+.hero{position:relative;min-height:88vh;min-height:88svh;overflow:hidden;display:flex;flex-direction:column}
+.hero-sky{position:absolute;inset:0;background:linear-gradient(180deg,#cdbccb 0%,#e7b98a 34%,#e29a5c 52%,#7a4a34 68%,#1a1310 84%,#0e0a08 100%)}
+.hero-ground{position:absolute;left:0;right:0;bottom:0;height:30%;background:linear-gradient(180deg,#0c0806 0%,#050302 100%)}
+.hero-glow{position:absolute;right:5%;bottom:29%;width:30%;height:96px;filter:blur(40px);opacity:.45;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,225,170,.4))}
+.hero-visual{pointer-events:none;position:absolute;left:50%;transform:translateX(-50%);bottom:27%;width:96%;max-width:1320px}
+.hero-visual img{width:100%;height:auto;user-select:none;filter:drop-shadow(0 25px 25px rgba(0,0,0,.15))}
+.hero-visual svg{width:100%;height:auto}
+.hero-content{position:relative;z-index:10;margin-top:auto;width:100%}
+.hero-inner{max-width:1152px;margin:0 auto;padding:0 20px 48px}
+@media(min-width:640px){.hero-inner{padding:0 32px 64px}}
+.hero-copy{max-width:576px}
+.hero-copy h1{font-size:36px;font-weight:700;letter-spacing:-.02em;color:#fff;line-height:1.05;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+@media(min-width:640px){.hero-copy h1{font-size:48px}}
+.hero-copy p{margin-top:16px;font-size:16px;color:rgba(255,255,255,.7);max-width:448px}
+@media(min-width:640px){.hero-copy p{font-size:18px}}
+.hero-ctas{margin-top:28px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+
+/* ── Value strip ──────────────────────────────────────────────────── */
+.value-strip{background:#fff;border-bottom:1px solid #f3f4f6;padding:40px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:640px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-card{border:1px solid #e5e7eb;border-radius:12px;background:#fff;padding:16px}
+.stat-card .ic{color:#4f46e5;margin-bottom:8px}
+.stat-num{font-size:24px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.stat-label{margin-top:6px;font-size:12px;color:#6b7280;line-height:1.35}
+
+/* ── Secțiuni generale ────────────────────────────────────────────── */
+.section{padding:64px 0}
+@media(min-width:640px){.section{padding:80px 0}}
+.section-head{text-align:center;margin-bottom:40px}
+.section-head h2{font-size:24px;font-weight:700}
+@media(min-width:640px){.section-head h2{font-size:30px}}
+.section-head .sub{margin-top:8px;color:#4b5563}
+.section-head .sub.narrow{max-width:576px;margin-left:auto;margin-right:auto}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;margin-bottom:12px}
+.eyebrow.indigo{background:#e0e7ff;color:#4338ca}
+.eyebrow.amber{background:#fef3c7;color:#b45309}
+.band{background:#f9fafb;border-top:1px solid #f3f4f6;border-bottom:1px solid #f3f4f6}
+
+/* ── Badge-uri & rânduri preview ──────────────────────────────────── */
+.badge{padding:2px 8px;border-radius:999px;font-size:10px;font-weight:500;white-space:nowrap}
+.badge-green{background:#dcfce7;color:#15803d}
+.badge-amber{background:#fef3c7;color:#b45309}
+.badge-gray{background:#f3f4f6;color:#4b5563}
+.badge-indigo{background:#e0e7ff;color:#4338ca}
+.prev-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #f3f4f6}
+.prev-row:last-child{border-bottom:0}
+.prev-id{font-size:12px;font-weight:600}
+.prev-sub{font-size:11px;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prev-sub.nums{font-variant-numeric:tabular-nums}
+
+/* ── Feature explorer (taburi) ────────────────────────────────────── */
+.tab-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:32px}
+.tab-btn{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:500;overflow:hidden;background:#f3f4f6;color:#374151;transition:background .15s,color .15s}
+.tab-btn:hover{background:#e5e7eb}
+.tab-btn.active{background:#1a1a1a;color:#fff}
+.tab-progress{position:absolute;bottom:0;left:0;height:2px;background:#818cf8;animation:tabbar 4s linear forwards}
+.feature-grid{display:grid;grid-template-columns:1fr;gap:32px;align-items:center}
+@media(min-width:1024px){.feature-grid{grid-template-columns:1fr 1fr}}
+.feature-text h3{font-size:20px;font-weight:600}
+.points{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.points li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#374151}
+.pt-check{margin-top:2px;width:20px;height:20px;border-radius:999px;background:#dcfce7;color:#15803d;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.preview-card{border:1px solid #e5e7eb;border-radius:16px;background:#fff;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.preview-head{padding:8px 12px;border-bottom:1px solid #f3f4f6;background:#f9fafb;font-size:11px;font-weight:500;color:#6b7280}
+
+/* previews: flotă */
+.fleet-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:12px}
+.fleet-card{border:1px solid #f3f4f6;border-radius:8px;padding:10px}
+.fleet-card .top{display:flex;align-items:center;gap:6px;margin-bottom:4px;color:#9ca3af}
+.fleet-card .plate{font-size:12px;font-weight:600;color:#111827}
+/* previews: documente AI */
+.docs{padding:12px}
+.docs-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.docs-head .fn{font-size:12px;font-weight:500;color:#374151}
+.docs-head .ic{color:#4f46e5}
+.kv{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid #f3f4f6;animation:fadeIn .5s ease both}
+.kv:last-child{border-bottom:0}
+.kv .k{font-size:11px;color:#6b7280}
+.kv .v{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums}
+/* previews: yard */
+.yard-wrap{padding:12px}
+.yard-map{position:relative;width:100%;height:176px;border-radius:8px;overflow:hidden;border:1px solid #f3f4f6;background-color:#f7f8fa;background-image:linear-gradient(#eceef1 1px,transparent 1px),linear-gradient(90deg,#eceef1 1px,transparent 1px);background-size:20px 20px}
+.yard-hall{position:absolute;left:14%;top:32%;width:72%;height:36%;border-radius:8px;border:2px solid #d1d5db;background-color:rgba(229,231,235,.7);background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.025) 0 8px,transparent 8px 16px);display:flex;align-items:center;justify-content:center}
+.yard-hall p{font-size:11px;font-weight:600;color:#6b7280}
+.yard-gate{position:absolute;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:6px;border:2px solid #d1d5db;background:#fff;color:#1f2937;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.yard-gate .yg-n{font-size:11px;font-weight:700;line-height:1}
+.yard-gate .yg-s{font-size:6px;font-weight:600;text-transform:uppercase;color:#16a34a}
+.yard-gate.occ{background:#4f46e5;border-color:#4338ca;color:#fff}
+.yard-gate.occ .yg-s{color:#fff;opacity:.9}
+.yard-legend{margin-top:8px;display:flex;align-items:center;justify-content:space-between;padding:0 4px}
+.yard-legend .yl-left{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#6b7280}
+.yard-legend .yl-left svg{color:#9ca3af}
+/* previews: dashboard */
+.dash{padding:16px}
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.dash-stat{border-radius:8px;background:#f9fafb;padding:8px;text-align:center}
+.ds-v{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.ds-k{font-size:10px;color:#6b7280}
+.dash-bars{display:flex;align-items:flex-end;gap:6px;height:80px}
+.dash-bar{flex:1;border-radius:4px 4px 0 0;background:rgba(99,102,241,.8);transform:scaleY(0);transform-origin:bottom;transition:transform .7s}
+.dash-bars.run .dash-bar{transform:scaleY(1)}
+
+/* ── Flux de lucru ────────────────────────────────────────────────── */
+.flow-stepper{position:relative}
+.flow-line,.flow-line-fill{display:none}
+@media(min-width:768px){
+  .flow-line{display:block;position:absolute;left:0;right:0;top:24px;height:2px;background:#e5e7eb}
+  .flow-line-fill{display:block;position:absolute;left:0;top:24px;height:2px;background:#6366f1;transition:width .5s}
 }
-body { font-family: 'Exo 2', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+.flow-steps{position:relative;display:grid;grid-template-columns:repeat(2,1fr);row-gap:16px}
+@media(min-width:640px){.flow-steps{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:768px){.flow-steps{grid-template-columns:repeat(5,1fr)}}
+.flow-steps li{display:flex;align-items:center;gap:8px}
+@media(min-width:768px){.flow-steps li{flex-direction:column;text-align:center}}
+.flow-dot{position:relative;z-index:10;width:48px;height:48px;border-radius:999px;display:flex;align-items:center;justify-content:center;border:2px solid #e5e7eb;background:#fff;color:#9ca3af;transition:all .3s;flex-shrink:0}
+.flow-dot.done{background:#e0e7ff;border-color:#a5b4fc;color:#4f46e5}
+.flow-dot.active{background:#4f46e5;border-color:#4f46e5;color:#fff;transform:scale(1.1);box-shadow:0 10px 15px -3px #c7d2fe}
+.flow-step-label{font-size:12px;font-weight:500;color:#6b7280}
+.flow-step-label.active{color:#111827}
+.flow-detail{margin-top:32px;display:grid;grid-template-columns:1fr;gap:24px;align-items:center}
+@media(min-width:1024px){.flow-detail{grid-template-columns:1fr 1fr}}
+.flow-accent{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#4f46e5;text-transform:uppercase;letter-spacing:.05em}
+.flow-detail h3{margin-top:8px;font-size:20px;font-weight:600}
+.flow-detail .desc{margin-top:8px;font-size:14px;color:#4b5563;line-height:1.6}
+.flow-chips{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.flow-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;background:#f3f4f6;font-size:12px;font-weight:500;color:#374151}
+.flow-chip svg{color:#16a34a}
+.flow-icon-panel{border:1px solid #e5e7eb;border-radius:16px;background:linear-gradient(135deg,#eef2ff,#fff);padding:32px;display:flex;align-items:center;justify-content:center}
+.flow-icon-box{width:80px;height:80px;border-radius:16px;background:#fff;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);border:1px solid #f3f4f6;display:flex;align-items:center;justify-content:center;color:#4f46e5}
 
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  padding: 1.25rem var(--pad);
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(255,255,255,0.97); box-shadow: 0 1px 0 rgba(0,0,0,0.08); backdrop-filter: blur(12px);
-  transition: background 0.4s, box-shadow 0.4s;
-}
-nav.on-hero { background: transparent; box-shadow: none; backdrop-filter: none; }
-.logo { font-family: 'Exo 2', sans-serif; font-size: 1.25rem; font-weight: 700; letter-spacing: 0.05em; color: var(--black); text-decoration: none; transition: color 0.4s; }
-nav.on-hero .logo { color: var(--white); }
-.logo span { color: var(--gold); }
-.nav-links { display: flex; gap: 2rem; list-style: none; }
-.nav-links a { color: var(--gray); text-decoration: none; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; }
-nav.on-hero .nav-links a { color: rgba(255,255,255,0.75); }
-.nav-links a:hover { color: var(--gold); }
-.nav-cta { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: var(--black); border: 1px solid rgba(0,0,0,0.25); padding: 0.5rem 1.1rem; transition: all 0.3s; white-space: nowrap; }
-nav.on-hero .nav-cta { color: var(--white); border-color: rgba(255,255,255,0.4); }
-.nav-cta:hover { background: var(--gold); border-color: var(--gold); color: var(--white) !important; }
-.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
-.hamburger span { display: block; width: 22px; height: 2px; background: var(--black); transition: all 0.3s; border-radius: 2px; }
-nav.on-hero .hamburger span { background: var(--white); }
-.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.hamburger.open span:nth-child(2) { opacity: 0; }
-.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-.mobile-menu { display: none; position: fixed; inset: 0; z-index: 190; background: rgba(10,10,10,0.97); flex-direction: column; align-items: center; justify-content: center; gap: 2rem; }
-.mobile-menu.open { display: flex; }
-.mobile-menu a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 1.5rem; font-weight: 600; letter-spacing: 0.06em; transition: color 0.3s; }
-.mobile-menu a:hover { color: var(--gold); }
-.mobile-menu .m-cta { font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold) !important; border: 1px solid var(--gold); padding: 0.75rem 2rem; font-size: 0.85rem !important; margin-top: 0.5rem; }
+/* ── Reputație ────────────────────────────────────────────────────── */
+.rev-toggle-wrap{display:flex;justify-content:center;margin-bottom:32px}
+.rev-toggle{display:inline-flex;border-radius:8px;background:#f3f4f6;padding:4px}
+.rev-toggle button{padding:8px 20px;border-radius:6px;font-size:14px;font-weight:600;color:#6b7280;transition:all .15s}
+.rev-toggle button:hover{color:#374151}
+.rev-toggle button.active{background:#fff;color:#111827;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.rev-avg{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:32px}
+.rev-avg-num{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums}
+.rev-avg-sub{font-size:12px;color:#6b7280;margin-top:2px}
+.stars{display:inline-flex;align-items:center;gap:2px}
+.rev-cards{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:768px){.rev-cards{grid-template-columns:repeat(3,1fr)}}
+.rev-card{border:1px solid #e5e7eb;border-radius:16px;background:#fff;padding:20px;transition:box-shadow .15s}
+.rev-card:hover{box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}
+.rev-card .head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.rev-card .subject{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rev-card .meta{font-size:11px;color:#6b7280}
+.rev-card .quote-ic{color:#c7d2fe;flex-shrink:0}
+.rev-card .comment{margin-top:12px;font-size:14px;color:#4b5563;line-height:1.6}
+.rev-card .foot{margin-top:16px;padding-top:12px;border-top:1px solid #f3f4f6;display:flex;align-items:center;gap:8px}
+.rev-card .avatar{width:24px;height:24px;border-radius:999px;background:#e0e7ff;color:#4338ca;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.rev-card .by{font-size:11px;color:#6b7280}
+.rev-card .by b{font-weight:500;color:#374151}
+.rev-note{margin:32px auto 0;max-width:672px;display:flex;align-items:flex-start;gap:12px;border:1px solid #e5e7eb;border-radius:12px;background:#f9fafb;padding:12px 16px}
+.rev-note svg{color:#9ca3af;flex-shrink:0;margin-top:2px}
+.rev-note p{font-size:12px;color:#6b7280;line-height:1.6}
 
-/* HERO */
-#home { min-height: 100svh; background: var(--dark); position: relative; display: flex; align-items: flex-end; padding: 0 var(--pad) clamp(3rem, 8vw, 5rem); overflow: hidden; }
-.hero-bg { position: absolute; inset: 0; background: repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(201,168,76,0.04) 60px), repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(201,168,76,0.04) 60px); background-color: #0d0d0d; }
-.hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.07) 0%, transparent 60%); }
-.hero-num { position: absolute; right: var(--pad); top: 50%; transform: translateY(-50%); font-family: 'Cormorant Garamond', serif; font-size: clamp(8rem, 20vw, 20rem); font-weight: 300; color: rgba(201,168,76,0.05); line-height: 1; user-select: none; letter-spacing: -0.05em; }
-.hero-content { position: relative; max-width: 750px; padding-top: clamp(5rem, 10vw, 7rem); }
-.hero-tag { display: inline-flex; align-items: center; gap: 10px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 1s forwards 0.3s; }
-.hero-tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.6rem, 8vw, 6.5rem); font-weight: 400; line-height: 1.02; letter-spacing: -0.02em; color: var(--white); margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 1s forwards 0.5s; }
-h1 em { font-style: italic; color: var(--gold); }
-.hero-desc { font-size: clamp(0.88rem, 2vw, 1rem); color: rgba(255,255,255,0.5); font-weight: 300; line-height: 1.8; max-width: 460px; margin-bottom: 2rem; opacity: 0; animation: fadeUp 1s forwards 0.7s; }
-.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 1s forwards 0.9s; }
-.btn-gold-solid { background: var(--gold); color: var(--black); padding: 0.85rem 2rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--gold); transition: all 0.3s; display: inline-block; }
-.btn-gold-solid:hover { background: var(--gold2); border-color: var(--gold2); }
-.btn-ghost { background: transparent; color: rgba(255,255,255,0.65); padding: 0.85rem 2rem; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s; display: inline-block; }
-.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+/* ── Module ───────────────────────────────────────────────────────── */
+.modules-grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:640px){.modules-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.modules-grid{grid-template-columns:repeat(3,1fr)}}
+.module-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;transition:box-shadow .2s,transform .2s}
+.module-card:hover{box-shadow:0 4px 6px -1px rgba(0,0,0,.1);transform:translateY(-2px)}
+.module-icon{width:40px;height:40px;border-radius:8px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:#374151;transition:background .2s,color .2s}
+.module-card:hover .module-icon{background:#e0e7ff;color:#4f46e5}
+.module-card h3{font-size:14px;font-weight:600}
+.module-card p{margin-top:4px;font-size:14px;color:#4b5563}
+.trust-row{margin-top:40px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;column-gap:32px;row-gap:12px;font-size:14px;color:#6b7280}
+.trust-row span{display:inline-flex;align-items:center;gap:8px}
+.trust-row svg{color:#9ca3af}
 
-/* COMMON */
-.stag { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
-h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; color: var(--black); }
-h2 em { font-style: italic; color: var(--gold); }
-.slead { font-size: clamp(0.85rem, 2vw, 0.92rem); color: var(--gray); line-height: 1.8; font-weight: 300; margin-top: 0.75rem; }
+/* ── CTA final ────────────────────────────────────────────────────── */
+.cta-section{padding-bottom:64px}
+@media(min-width:640px){.cta-section{padding-bottom:80px}}
+.cta-box{border-radius:16px;background:#1a1a1a;color:#fff;padding:48px 24px;text-align:center}
+@media(min-width:640px){.cta-box{padding:48px}}
+.cta-box h2{font-size:24px;font-weight:700}
+@media(min-width:640px){.cta-box h2{font-size:30px}}
+.cta-box p{margin-top:12px;color:#d1d5db}
+.cta-box .btn{margin-top:28px;padding:12px 24px}
+.cta-box .btn-white:hover{background:#f3f4f6}
 
-/* ABOUT */
-#about { padding: clamp(4rem, 8vw, 7rem) var(--pad); background: var(--white); }
-.about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
-.about-visual { position: relative; aspect-ratio: 4/5; background: var(--off); }
-.avi { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; }
-.av-logo { font-family: 'Exo 2', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; color: var(--black); }
-.av-logo span { color: var(--gold); }
-.av-sub { font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); }
-.av-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold), transparent); }
-.about-list { margin-top: 2rem; }
-.ai { display: flex; gap: 1.25rem; padding: 1.25rem 0; border-bottom: 1px solid var(--light); align-items: flex-start; }
-.ai:first-child { border-top: 1px solid var(--light); }
-.ai-num { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; color: var(--gold); min-width: 26px; }
-.ai h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.25rem; }
-.ai p { font-size: 0.8rem; color: var(--gray); line-height: 1.6; font-weight: 300; }
+/* ── Footer ───────────────────────────────────────────────────────── */
+.site-footer{padding:24px 20px;border-top:1px solid #e5e7eb}
+@media(min-width:640px){.site-footer{padding:24px 32px}}
+.footer-inner{max-width:1152px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:16px}
+@media(min-width:640px){.footer-inner{flex-direction:row}}
+.footer-brand{display:flex;align-items:center;gap:8px;opacity:.7}
+.footer-brand .logo-mark{width:24px;height:24px;border-radius:6px;font-size:9px}
+.footer-brand span{font-size:14px;font-weight:700;color:#111827}
+.footer-links{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;column-gap:20px;row-gap:8px;font-size:12px;color:#6b7280}
+.footer-links button:hover{color:#111827}
+.footer-copy{font-size:12px;color:#9ca3af}
 
-/* SERVICES */
-#services { padding: clamp(4rem, 8vw, 7rem) var(--pad); background: var(--off); }
-.sh { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: end; margin-bottom: 3rem; }
-.sg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--light); }
-.sc { background: var(--off); padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.25rem, 2.5vw, 2rem); position: relative; transition: background 0.3s; overflow: hidden; }
-.sc:hover { background: var(--white); }
-.sc::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--gold); transition: width 0.3s; }
-.sc:hover::before { width: 3px; }
-.sn { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: rgba(201,168,76,0.25); line-height: 1; margin-bottom: 1.25rem; display: block; }
-.sc h3 { font-size: 0.92rem; font-weight: 600; margin-bottom: 0.5rem; }
-.sc p { font-size: 0.78rem; color: var(--gray); line-height: 1.7; font-weight: 300; }
-.ai-badge { display: inline-block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.4); padding: 3px 10px; border-radius: 2px; margin-bottom: 0.75rem; }
-
-/* SHOWCASE */
-#showcase { padding: clamp(4rem, 8vw, 7rem) var(--pad); background: var(--dark); overflow: hidden; position: relative; }
-#showcase::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(201,168,76,0.03) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(201,168,76,0.03) 60px); }
-.showcase-inner { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
-.showcase-steps { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
-.showcase-step { display: flex; gap: 1rem; align-items: flex-start; }
-.step-num { width: 32px; height: 32px; border: 1px solid rgba(201,168,76,0.4); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 0.72rem; flex-shrink: 0; }
-.step-title { font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 0.15rem; }
-.step-desc { font-size: 0.75rem; color: rgba(255,255,255,0.35); font-weight: 300; line-height: 1.6; }
-.dashboard { background: #1e1e2e; border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
-.db-bar { background: #16162a; padding: 0.65rem 1rem; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.db-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-.db-title { font-size: 0.65rem; color: rgba(255,255,255,0.3); margin-left: 0.5rem; font-family: monospace; }
-.db-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(255,255,255,0.04); margin: 0.75rem; border-radius: 4px; overflow: hidden; }
-.db-stat { background: #1e1e2e; padding: 0.75rem 0.5rem; text-align: center; }
-.db-stat-val { font-size: clamp(0.9rem, 2vw, 1.2rem); font-weight: 700; }
-.db-stat-lbl { font-size: 0.55rem; color: rgba(255,255,255,0.3); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.1em; }
-.db-chart { margin: 0 0.75rem 0.5rem; background: #16162a; border-radius: 4px; padding: 0.75rem; }
-.db-chart-lbl { font-size: 0.58rem; color: rgba(255,255,255,0.3); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; }
-.db-bars { display: flex; align-items: flex-end; gap: 3px; height: 50px; }
-.db-bars div { flex: 1; border-radius: 2px 2px 0 0; }
-.db-table { margin: 0 0.75rem 0.75rem; background: #16162a; border-radius: 4px; overflow: hidden; }
-.db-thead { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 0.4rem 0.6rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.db-thead span { font-size: 0.55rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.08em; }
-.db-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 0.4rem 0.6rem; border-bottom: 1px solid rgba(255,255,255,0.03); align-items: center; }
-.db-row:last-child { border-bottom: none; }
-.db-row span { font-size: 0.65rem; color: rgba(255,255,255,0.55); }
-.badge { font-size: 0.58rem; padding: 2px 7px; border-radius: 2px; display: inline-block; }
-.badge-done { color: #4ade80; background: rgba(74,222,128,0.1); }
-.badge-proc { color: #febc2e; background: rgba(254,188,46,0.1); }
-
-/* BLOG */
-#blog { padding: clamp(4rem, 8vw, 7rem) var(--pad); background: var(--white); }
-.bh { margin-bottom: 2.5rem; }
-.bg { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.25rem, 3vw, 2rem); }
-.bc { cursor: pointer; }
-.bimg { aspect-ratio: 16/10; background: var(--off); margin-bottom: 1.1rem; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.bimg-n { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 6vw, 5rem); font-weight: 300; color: rgba(201,168,76,0.2); }
-.bmeta { display: flex; gap: 1rem; align-items: center; margin-bottom: 0.5rem; }
-.bcat { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
-.bdate { font-size: 0.7rem; color: var(--gray); }
-.bc h3 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.4rem); font-weight: 500; line-height: 1.3; margin-bottom: 0.5rem; transition: color 0.3s; }
-.bc:hover h3 { color: var(--gold2); }
-.bc p { font-size: 0.78rem; color: var(--gray); line-height: 1.7; font-weight: 300; }
-
-/* CONTACT */
-#contact { display: grid; grid-template-columns: 1fr 1fr; }
-.cl { background: var(--dark); padding: clamp(3rem, 7vw, 6rem) var(--pad); display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
-.cl::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(201,168,76,0.04) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(201,168,76,0.04) 60px); }
-.cl > * { position: relative; }
-.cl h2 { color: var(--white); }
-.cl .slead { color: rgba(255,255,255,0.4); max-width: 360px; }
-.cdl { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
-.cdi { display: flex; gap: 1rem; align-items: center; }
-.cdi-icon { width: 36px; height: 36px; border: 1px solid rgba(201,168,76,0.3); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 0.8rem; flex-shrink: 0; }
-.cdi-l { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2px; }
-.cdi-v { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
-.cr { background: var(--off); padding: clamp(3rem, 7vw, 6rem) var(--pad); display: flex; flex-direction: column; justify-content: center; }
-.cf { display: flex; flex-direction: column; gap: 1.1rem; margin-top: 1.5rem; }
-.fr { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
-.fd { display: flex; flex-direction: column; gap: 0.35rem; }
-.fd label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); font-weight: 600; }
-.fd input, .fd textarea { background: var(--white); border: 1px solid var(--light); color: var(--text); padding: 0.75rem 0.9rem; font-family: 'Exo 2', sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.3s; resize: none; width: 100%; }
-.fd input:focus, .fd textarea:focus { border-color: var(--gold); }
-.fd input::placeholder, .fd textarea::placeholder { color: #ccc; }
-.btn-s { background: var(--gold); color: var(--black); padding: 0.85rem 2rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.3s; font-family: 'Exo 2', sans-serif; align-self: flex-start; }
-.btn-s:hover { background: var(--gold2); }
-
-/* FAQ */
-#faq { padding: clamp(4rem, 8vw, 6rem) var(--pad); background: var(--white); border-top: 1px solid var(--light); }
-.fi { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 6vw, 6rem); }
-.fitem { border-bottom: 1px solid var(--light); }
-.fq { padding: 1.1rem 0; font-size: 0.88rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; transition: color 0.3s; user-select: none; }
-.fq:hover { color: var(--gold); }
-.ficon { font-size: 1.1rem; color: var(--gold); flex-shrink: 0; transition: transform 0.3s; }
-.fa { font-size: 0.82rem; color: var(--gray); line-height: 1.8; font-weight: 300; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
-.fitem.open .fa { max-height: 200px; padding-bottom: 1.1rem; }
-.fitem.open .ficon { transform: rotate(45deg); }
-
-/* FOOTER */
-footer { background: var(--dark); padding: clamp(2.5rem, 5vw, 4rem) var(--pad) clamp(1.5rem, 3vw, 2rem); }
-.footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: clamp(1.5rem, 3vw, 3rem); margin-bottom: clamp(2rem, 4vw, 3rem); }
-.fl-logo { font-family: 'Exo 2', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 0.6rem; }
-.fl-logo span { color: var(--gold); }
-.fl-desc { font-size: 0.78rem; color: rgba(255,255,255,0.3); line-height: 1.7; }
-footer h5 { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 1.1rem; font-weight: 600; }
-footer ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
-footer ul li a { text-decoration: none; font-size: 0.8rem; color: rgba(255,255,255,0.45); transition: color 0.3s; }
-footer ul li a:hover { color: var(--gold); }
-.footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
-.footer-bottom p { font-size: 0.7rem; color: rgba(255,255,255,0.2); }
-
-@keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--white); }
-::-webkit-scrollbar-thumb { background: var(--gold); }
-
-/* ══ TABLET 1024px ══ */
-@media (max-width: 1024px) {
-  .nav-links, .nav-cta { display: none; }
-  .hamburger { display: flex; }
-  .about-inner { grid-template-columns: 1fr; }
-  .about-visual { display: none; }
-  .sh { grid-template-columns: 1fr; gap: 1rem; }
-  .sg { grid-template-columns: repeat(2, 1fr); }
-  .showcase-inner { grid-template-columns: 1fr; }
-  .bg { grid-template-columns: repeat(2, 1fr); }
-  #contact { grid-template-columns: 1fr; }
-  .fi { grid-template-columns: 1fr; gap: 2rem; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-  .fr { grid-template-columns: 1fr 1fr; }
-}
-
-/* ══ MOBILE 600px ══ */
-@media (max-width: 600px) {
-  .sg { grid-template-columns: 1fr; }
-  .bg { grid-template-columns: 1fr; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-  .hero-num { display: none; }
-  .btn-gold-solid, .btn-ghost { width: 100%; text-align: center; }
-  .hero-actions { flex-direction: column; }
-  .db-stats { grid-template-columns: repeat(2,1fr); }
-  .db-thead, .db-row { grid-template-columns: 2fr 1fr 1fr; }
-  .db-thead span:last-child, .db-row span:last-child { display: none; }
-  .fr { grid-template-columns: 1fr; }
-}
-
-/* ══ SMALL MOBILE 380px ══ */
-@media (max-width: 380px) {
-  .footer-top { grid-template-columns: 1fr; }
-  .mobile-menu a { font-size: 1.2rem; }
-}
+/* ── Cookie banner + modale ───────────────────────────────────────── */
+.cookie-banner{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:12px;animation:fadeIn .4s ease}
+@media(min-width:640px){.cookie-banner{padding:16px}}
+.cookie-inner{max-width:768px;margin:0 auto;border-radius:16px;background:#fff;border:1px solid #e5e7eb;box-shadow:0 20px 25px -5px rgba(0,0,0,.1);padding:16px 20px;display:flex;flex-direction:column;gap:16px}
+@media(min-width:640px){.cookie-inner{flex-direction:row;align-items:center;padding:20px 24px}}
+.cookie-text{display:flex;align-items:flex-start;gap:12px;flex:1}
+.cookie-ic{flex-shrink:0;width:36px;height:36px;border-radius:8px;background:#e0e7ff;color:#4f46e5;display:flex;align-items:center;justify-content:center}
+.cookie-text p{font-size:14px;color:#4b5563;line-height:1.6}
+.cookie-text .link{font-weight:500;color:#4f46e5}
+.cookie-text .link:hover{text-decoration:underline}
+.modal-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:0;animation:fadeIn .2s ease}
+@media(min-width:640px){.modal-overlay{align-items:center;padding:16px}}
+.modal-box{background:#fff;width:100%;max-height:85vh;border-radius:16px 16px 0 0;box-shadow:0 25px 50px -12px rgba(0,0,0,.25);overflow:hidden;display:flex;flex-direction:column}
+@media(min-width:640px){.modal-box{max-width:512px;border-radius:16px}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid #f3f4f6}
+.modal-head h3{font-size:18px;font-weight:700}
+.modal-close{color:#9ca3af;transition:color .15s}.modal-close:hover{color:#374151}
+.modal-body{padding:20px 24px;overflow-y:auto}
+.modal-body .intro{font-size:14px;color:#4b5563;line-height:1.6}
+.modal-body .sec{margin-top:20px}
+.modal-body .sec h4{font-size:14px;font-weight:600}
+.modal-body .sec p{margin-top:4px;font-size:14px;color:#4b5563;line-height:1.6}
+.modal-body .updated{margin-top:24px;font-size:12px;color:#9ca3af}
+.modal-foot{padding:16px 24px;border-top:1px solid #f3f4f6;text-align:right}
 </style>
 </head>
 <body>
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#home" onclick="closeMenu()">Home</a>
-  <a href="#about" onclick="closeMenu()">About</a>
-  <a href="#services" onclick="closeMenu()">Services</a>
-  <a href="#blog" onclick="closeMenu()">Blog</a>
-  <a href="#contact" onclick="closeMenu()">Contact</a>
-  <a href="#contact" class="m-cta" onclick="closeMenu()">Get in Touch</a>
-</div>
-
-<nav id="nav">
-  <a href="#home" class="logo">TH<span>Link</span></a>
-  <ul class="nav-links">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#blog">Blog</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="#contact" class="nav-cta">Get in Touch</a>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<section id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-num">01</div>
-  <div class="hero-content">
-    <div class="hero-tag">IT & Software Solutions</div>
-    <h1>Building<br><em>Digital</em><br>Infrastructure.</h1>
-    <p class="hero-desc">We automate your data so you never have to work manually in Excel, Word or PDF again — and build everything else your business needs digitally.</p>
-    <div class="hero-actions">
-      <a href="#services" class="btn-gold-solid">Our Services</a>
-      <a href="#contact" class="btn-ghost">Contact Us</a>
-    </div>
-  </div>
-</section>
-
-<section id="about">
-  <div class="about-inner">
-    <div class="about-visual">
-      <div class="avi">
-        <div class="av-logo">TH<span>Link</span></div>
-        <div class="av-sub">Oradea, Romania</div>
+<!-- ── Header — pastilă plutitoare ─────────────────────────────────── -->
+<header class="site-header">
+  <div class="header-pill">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-mark">TH</span>
+        <span class="logo-name">THLink</span>
       </div>
-      <div class="av-bar"></div>
-    </div>
-    <div>
-      <div class="stag">About Us</div>
-      <h2>We turn <em>ideas</em><br>into solutions.</h2>
-      <p class="slead">TH Link is an IT & Software company based in Oradea, Romania — building robust, scalable digital products for businesses of all sizes.</p>
-      <div class="about-list">
-        <div class="ai"><span class="ai-num">01</span><div><h4>Custom Development</h4><p>Tailored software built specifically for your business needs and workflows.</p></div></div>
-        <div class="ai"><span class="ai-num">02</span><div><h4>Agile & Transparent</h4><p>Regular updates, clear communication and on-time delivery every time.</p></div></div>
-        <div class="ai"><span class="ai-num">03</span><div><h4>Long-term Support</h4><p>We don't just build and leave — we maintain and evolve your product.</p></div></div>
+      <nav class="header-nav">
+        <a href="#functii">Funcții</a>
+        <a href="#flux">Cum funcționează</a>
+        <a href="#reputatie">Reputație</a>
+        <a href="#module">Module</a>
+      </nav>
+      <div class="header-actions">
+        <a href="tel:+40000000000" class="phone-btn" aria-label="Sună-ne"><i data-icon="phone" data-size="15"></i></a>
+        <a href="https://app.thlink.ro/login" class="btn btn-white btn-sm">Autentificare</a>
+        <a href="#contact" class="btn btn-lime btn-sm">Contact</a>
       </div>
     </div>
   </div>
-</section>
+</header>
 
-<section id="services">
-  <div class="sh">
-    <div><div class="stag">What We Do</div><h2>Our <em>services</em></h2></div>
-    <p class="slead">Stop working manually in Excel, Word or PDF. We automate your data — and build everything else your business needs digitally.</p>
-  </div>
-  <div class="sg">
-    <div class="sc" style="border-top:3px solid var(--gold);">
-      <span class="sn">01</span>
-      <div class="ai-badge">Core Service</div>
-      <h3>ETL & Data Processing</h3>
-      <p>Forget copy-paste and manual spreadsheets. We build automated pipelines that extract, transform and load your data — reliably, fast and at scale.</p>
-    </div>
-    <div class="sc" style="border-top:3px solid var(--gold);">
-      <span class="sn">02</span>
-      <div class="ai-badge">AI-Powered</div>
-      <h3>Intelligent Data Extraction</h3>
-      <p>Upload any table — Excel, CSV, PDF or Word — and our AI reads, structures and processes it automatically. Hours of manual work done in seconds.</p>
-    </div>
-    <div class="sc"><span class="sn">03</span><h3>Web Development</h3><p>Modern, responsive web applications built with the latest technologies and best practices.</p></div>
-    <div class="sc"><span class="sn">04</span><h3>Mobile Apps</h3><p>Native and cross-platform mobile applications for iOS and Android that users love.</p></div>
-    <div class="sc"><span class="sn">05</span><h3>Cloud Solutions</h3><p>Architecture, deployment and management of scalable cloud infrastructure.</p></div>
-    <div class="sc"><span class="sn">06</span><h3>API Integration</h3><p>Seamless integration between systems, platforms and third-party services.</p></div>
-    <div class="sc"><span class="sn">07</span><h3>IT Consulting</h3><p>Strategic technology guidance to help you make the right decisions for your business.</p></div>
-    <div class="sc"><span class="sn">08</span><h3>Maintenance & Support</h3><p>Ongoing technical support, updates and performance monitoring for your systems.</p></div>
-  </div>
-</section>
+<main>
+  <!-- ── Hero — scenă de apus cu camion lateral ──────────────────────── -->
+  <section class="hero">
+    <div class="hero-sky"></div>
+    <div class="hero-ground"></div>
+    <div class="hero-glow"></div>
 
-<section id="showcase">
-  <div class="showcase-inner">
-    <div>
-      <div class="stag" style="color:var(--gold);">In Action</div>
-      <h2 style="color:var(--white);">Data that <em>works</em><br>for you.</h2>
-      <p class="slead" style="color:rgba(255,255,255,0.45);margin-top:0.75rem;">Our AI engine reads any table, processes it in real time and delivers clean, ready-to-use data — no manual input required.</p>
-      <div class="showcase-steps">
-        <div class="showcase-step"><div class="step-num">01</div><div><div class="step-title">Upload any table</div><div class="step-desc">Excel, CSV, PDF — our engine handles them all.</div></div></div>
-        <div class="showcase-step"><div class="step-num">02</div><div><div class="step-title">AI processes & structures</div><div class="step-desc">Fields are identified, cleaned and mapped automatically.</div></div></div>
-        <div class="showcase-step"><div class="step-num">03</div><div><div class="step-title">Export or integrate</div><div class="step-desc">Get clean data via API, JSON, CSV or direct DB insertion.</div></div></div>
-      </div>
+    <div class="hero-visual">
+      <!-- pune „hero-truck.png” lângă acest fișier ca să înlocuiești silueta -->
+      <img src="hero-truck.png" alt="" draggable="false"
+           onerror="this.style.display='none';document.getElementById('heroTruckSvg').style.display='block'">
+      <svg id="heroTruckSvg" style="display:none" viewBox="0 0 1700 360" fill="#000000" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- remorcă -->
+        <rect x="44" y="44" width="1240" height="206" rx="6"/>
+        <rect x="120" y="250" width="1164" height="12"/>
+        <rect x="980" y="250" width="8" height="34"/>
+        <rect x="1006" y="250" width="8" height="34"/>
+        <!-- șasiu tractor -->
+        <rect x="1120" y="250" width="478" height="12"/>
+        <!-- eșapament -->
+        <rect x="1322" y="108" width="9" height="142" rx="2"/>
+        <!-- cap tractor (profil aero, tip Anthem) -->
+        <path d="M1344 250 L1344 62 Q1344 46 1366 45 L1410 44 C1478 46 1520 70 1548 112 Q1560 130 1564 138 L1582 180 Q1587 189 1602 191 L1652 200 Q1674 204 1681 224 L1683 236 Q1684 240 1696 241 L1696 264 L1668 264 L1656 266 A56 56 0 0 0 1552 266 L1548 250 Z"/>
+        <!-- antene -->
+        <rect x="1430" y="30" width="3" height="16" rx="1.5"/>
+        <rect x="1452" y="26" width="3" height="20" rx="1.5"/>
+        <!-- oglindă -->
+        <line x1="1572" y1="152" x2="1600" y2="144" stroke="#000000" stroke-width="5"/>
+        <rect x="1596" y="138" width="9" height="30" rx="3"/>
+        <!-- rezervor -->
+        <rect x="1414" y="260" width="120" height="28" rx="12"/>
+        <!-- roți -->
+        <circle cx="250" cy="302" r="56"/>
+        <circle cx="380" cy="302" r="56"/>
+        <circle cx="1240" cy="302" r="56"/>
+        <circle cx="1370" cy="302" r="56"/>
+        <circle cx="1604" cy="302" r="56"/>
+      </svg>
     </div>
-    <div>
-      <div class="dashboard">
-        <div class="db-bar">
-          <div class="db-dot" style="background:#ff5f57;"></div>
-          <div class="db-dot" style="background:#febc2e;"></div>
-          <div class="db-dot" style="background:#28c840;"></div>
-          <span class="db-title">TH Link — Data Dashboard</span>
-        </div>
-        <div class="db-stats">
-          <div class="db-stat"><div class="db-stat-val" style="color:var(--gold);">24,839</div><div class="db-stat-lbl">Records</div></div>
-          <div class="db-stat"><div class="db-stat-val" style="color:#4ade80;">99.2%</div><div class="db-stat-lbl">Accuracy</div></div>
-          <div class="db-stat"><div class="db-stat-val" style="color:#60a5fa;">1.2s</div><div class="db-stat-lbl">Avg Process</div></div>
-          <div class="db-stat"><div class="db-stat-val" style="color:#f472b6;">147</div><div class="db-stat-lbl">Sources</div></div>
-        </div>
-        <div class="db-chart">
-          <div class="db-chart-lbl">Records processed / day</div>
-          <div class="db-bars">
-            <div style="background:rgba(201,168,76,0.2);height:40%;"></div>
-            <div style="background:rgba(201,168,76,0.3);height:55%;"></div>
-            <div style="background:rgba(201,168,76,0.25);height:35%;"></div>
-            <div style="background:rgba(201,168,76,0.4);height:70%;"></div>
-            <div style="background:rgba(201,168,76,0.35);height:60%;"></div>
-            <div style="background:rgba(201,168,76,0.5);height:85%;"></div>
-            <div style="background:var(--gold);height:100%;"></div>
+
+    <div class="hero-content">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <h1>Tot transportul tău,<br>într-un singur loc</h1>
+          <p>Comenzi, facturi cu e-Factura, flotă și documente procesate cu AI — organizate, conectate și ușor de urmărit.</p>
+          <div class="hero-ctas">
+            <a href="https://app.thlink.ro/login" class="btn btn-white">Intră în cont <i data-icon="arrow-right" data-size="16"></i></a>
+            <a href="#flux" class="btn btn-ghost">Vezi cum funcționează</a>
           </div>
         </div>
-        <div class="db-table">
-          <div class="db-thead"><span>Source File</span><span>Records</span><span>Status</span><span>Time</span></div>
-          <div class="db-row"><span>sales_q1_2025.xlsx</span><span>4,281</span><span><span class="badge badge-done">Done</span></span><span>0.9s</span></div>
-          <div class="db-row"><span>clients_export.csv</span><span>12,094</span><span><span class="badge badge-done">Done</span></span><span>1.4s</span></div>
-          <div class="db-row"><span>invoices_march.pdf</span><span>893</span><span><span class="badge badge-proc">Processing</span></span><span>—</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Cifre animate ───────────────────────────────────────────────── -->
+  <section class="value-strip">
+    <div class="container">
+      <div class="stats-grid" id="statsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ── Explorator de funcții ───────────────────────────────────────── -->
+  <section id="functii" class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Ce poți face cu platforma</h2>
+        <p class="sub">Alege o funcție ca să vezi exact cum arată în aplicație.</p>
+      </div>
+      <div class="tab-row" id="tabRow"></div>
+      <div class="feature-grid">
+        <div class="feature-text" id="tabText"></div>
+        <div class="preview-card">
+          <div class="preview-head" id="previewHead"></div>
+          <div id="previewBody"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="contact">
-  <div class="cl">
-    <div class="stag">Get In Touch</div>
-    <h2>Let's <em>work</em><br>together.</h2>
-    <p class="slead">Have a project in mind? We'd love to hear about it. Reach out and let's start a conversation.</p>
-    <div class="cdl">
-      <div class="cdi"><div class="cdi-icon">✉</div><div><div class="cdi-l">Email</div><div class="cdi-v">contact@thlink.ro</div></div></div>
-      <div class="cdi"><div class="cdi-icon">☎</div><div><div class="cdi-l">Phone</div><div class="cdi-v">0745 867 086</div></div></div>
-    </div>
-  </div>
-  <div class="cr">
-    <div class="stag">Send a Message</div>
-    <h2 style="font-size:clamp(1.6rem,4vw,2.2rem);">Tell us about<br><em>your project</em></h2>
-    <form class="cf" onsubmit="return false;">
-      <div class="fr">
-        <div class="fd"><label>Name</label><input type="text" placeholder="Your name"></div>
-        <div class="fd"><label>Email</label><input type="email" placeholder="your@email.com"></div>
+  <!-- ── Flux de lucru ───────────────────────────────────────────────── -->
+  <section id="flux" class="band">
+    <div class="container section">
+      <div class="section-head" style="margin-bottom:48px">
+        <span class="eyebrow indigo"><i data-icon="calendar-clock" data-size="13"></i> Flux de lucru</span>
+        <h2>De la comandă la încasare, conectat</h2>
+        <p class="sub narrow">Fiecare pas folosește datele din pasul anterior — fără să reintroduci nimic. Apasă pe oricare etapă ca să vezi ce se întâmplă.</p>
       </div>
-      <div class="fd"><label>Subject</label><input type="text" placeholder="Project inquiry"></div>
-      <div class="fd"><label>Message</label><textarea rows="5" placeholder="Tell us about your project..."></textarea></div>
-      <button type="submit" class="btn-s">Send Message</button>
-    </form>
-  </div>
-</section>
-
-<section id="faq">
-  <div class="fi">
-    <div>
-      <div class="stag">FAQ</div>
-      <h2>Frequently<br><em>asked</em></h2>
-      <p class="slead" style="margin-top:1rem;">Have more questions? Contact us at contact@thlink.ro</p>
+      <div class="flow-stepper">
+        <div class="flow-line"></div>
+        <div class="flow-line-fill" id="flowLineFill"></div>
+        <ol class="flow-steps" id="flowSteps"></ol>
+      </div>
+      <div class="flow-detail" id="flowDetail"></div>
     </div>
-    <div>
-      <div class="fitem"><div class="fq">How long does a typical project take? <span class="ficon">+</span></div><div class="fa">Depending on complexity, most projects range from 4–12 weeks. We'll give you a clear timeline before we start.</div></div>
-      <div class="fitem"><div class="fq">Do you work with small businesses? <span class="ficon">+</span></div><div class="fa">Absolutely. We work with businesses of all sizes, from startups to established companies.</div></div>
-      <div class="fitem"><div class="fq">What technologies do you use? <span class="ficon">+</span></div><div class="fa">We use modern stacks — React, Node.js, Python, cloud platforms (AWS, GCP) and more, depending on project needs.</div></div>
-      <div class="fitem"><div class="fq">Do you offer ongoing maintenance? <span class="ficon">+</span></div><div class="fa">Yes. We offer flexible maintenance and support packages to keep your product running smoothly after launch.</div></div>
-      <div class="fitem"><div class="fq">How do we get started? <span class="ficon">+</span></div><div class="fa">Simply reach out via the contact form or email us. We'll schedule a free consultation to understand your needs.</div></div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<footer>
-  <div class="footer-top">
-    <div><div class="fl-logo">TH<span>Link</span></div><p class="fl-desc">IT & Software Solutions<br>Oradea, Romania</p></div>
-    <div><h5>Navigation</h5><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#blog">Blog</a></li></ul></div>
-    <div><h5>Services</h5><ul><li><a href="#">ETL & Data Processing</a></li><li><a href="#">Web Development</a></li><li><a href="#">Cloud Solutions</a></li><li><a href="#">IT Consulting</a></li></ul></div>
-    <div><h5>Contact</h5><ul><li><a href="mailto:contact@thlink.ro">contact@thlink.ro</a></li><li><a href="tel:0712311112">0745 867 086</a></li><li><a href="#">Oradea, Romania</a></li></ul></div>
-  </div>
-  <div class="footer-bottom">
-    <p>© <span id="year"></span> THLink. All rights reserved.</p>
-    <p>thlink.ro</p>
+  <!-- ── Reputație ───────────────────────────────────────────────────── -->
+  <section id="reputatie" class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow amber"><i data-icon="star-fill" data-size="13"></i> Reputație</span>
+        <h2>Cu cine lucrezi, verificat din timp</h2>
+        <p class="sub narrow">Recenzii reale despre firme partenere și șoferi, scrise de companiile cu care au colaborat. Comută între cele două și vezi cum arată.</p>
+      </div>
+      <div class="rev-toggle-wrap">
+        <div class="rev-toggle" id="revToggle">
+          <button data-kind="company" class="active">Firme</button>
+          <button data-kind="driver">Șoferi</button>
+        </div>
+      </div>
+      <div class="rev-avg" id="revAvg"></div>
+      <div class="rev-cards" id="revCards"></div>
+      <div class="rev-note">
+        <i data-icon="shield-question" data-size="18"></i>
+        <p id="revNote"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Module ──────────────────────────────────────────────────────── -->
+  <section id="module" class="band">
+    <div class="container section">
+      <div class="section-head">
+        <h2>Module</h2>
+        <p class="sub">Activezi doar ce ai nevoie.</p>
+      </div>
+      <div class="modules-grid" id="modulesGrid"></div>
+      <div class="trust-row">
+        <span><i data-icon="shield-check" data-size="15"></i> Autentificare în 2 pași</span>
+        <span><i data-icon="building-2" data-size="15"></i> Date separate pe firmă</span>
+        <span><i data-icon="clock" data-size="15"></i> Acces oricând, de oriunde</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA final ───────────────────────────────────────────────────── -->
+  <section id="contact" class="container cta-section">
+    <div class="cta-box">
+      <h2>Gata de pornire?</h2>
+      <p>Autentifică-te și gestionează-ți transportul dintr-un singur loc.</p>
+      <a href="https://app.thlink.ro/login" class="btn btn-white">Autentificare <i data-icon="arrow-right" data-size="16"></i></a>
+    </div>
+  </section>
+</main>
+
+<!-- ── Footer ────────────────────────────────────────────────────────── -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo-mark">TH</span>
+      <span>THLink</span>
+    </div>
+    <nav class="footer-links">
+      <button onclick="openLegal('cookie')">Politica de cookie-uri</button>
+      <button onclick="openLegal('privacy')">Confidențialitate</button>
+      <button onclick="openLegal('terms')">Termeni și condiții</button>
+    </nav>
+    <p class="footer-copy">© <span id="year"></span> THLink. Toate drepturile rezervate.</p>
   </div>
 </footer>
 
+<div id="cookieRoot"></div>
+<div id="modalRoot"></div>
+
 <script>
-const nav = document.getElementById('nav');
-const hero = document.getElementById('home');
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-document.getElementById("year").textContent = new Date().getFullYear();
-new IntersectionObserver(([e]) => {
-  nav.classList.toggle('on-hero', e.isIntersecting);
-}, { threshold: 0.1 }).observe(hero);
+/* ══ Iconițe SVG inline (stil lucide: stroke 2, colțuri rotunjite) ══ */
+const ICONS = {
+  'package': '<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+  'file-text': '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>',
+  'truck': '<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+  'scan-line': '<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/>',
+  'bar-chart-3': '<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
+  'users': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  'arrow-right': '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  'check': '<path d="M20 6 9 17l-5-5"/>',
+  'shield-check': '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+  'clock': '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  'building-2': '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>',
+  'route': '<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
+  'wallet': '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+  'calendar-clock': '<path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><path d="M17.5 17.5 16 16.3V14"/><circle cx="16" cy="16" r="6"/>',
+  'map-pin': '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
+  'zap': '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  'cookie': '<path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/>',
+  'x': '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  'quote': '<path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/>',
+  'shield-question': '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+  'phone': '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+  'warehouse': '<path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35a2 2 0 0 1 1.26-1.85l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/><path d="M6 22V11a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v11"/><path d="M6 18h12"/><path d="M6 14h12"/>',
+};
 
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open');
-  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-});
-
-function closeMenu() {
-  hamburger.classList.remove('open');
-  mobileMenu.classList.remove('open');
-  document.body.style.overflow = '';
+function icon(name, size = 16, style = '') {
+  if (name === 'star-fill') {
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+  }
+  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"' + (style ? ' style="' + style + '"' : '') + '>' + (ICONS[name] || '') + '</svg>';
 }
 
-document.querySelectorAll('.fq').forEach(q => {
-  q.addEventListener('click', () => {
-    const item = q.parentElement;
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.fitem').forEach(i => i.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
-  });
+function star(filled, size = 13) {
+  const c = filled ? '#fbbf24' : '#e5e7eb';
+  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="' + c + '" stroke="' + c + '" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+}
+function stars(value) {
+  let out = '<span class="stars">';
+  for (let i = 1; i <= 5; i++) out += star(i <= value);
+  return out + '</span>';
+}
+
+/* placeholders <i data-icon="..."> → SVG */
+document.querySelectorAll('[data-icon]').forEach(el => {
+  el.outerHTML = icon(el.dataset.icon, parseInt(el.dataset.size || '16', 10));
 });
+
+/* ══ Utilitare: count-up + fade re-trigger ══════════════════════════ */
+function animateCount(el, target, suffix, dur = 1200) {
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min(1, (now - start) / dur);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(target * eased) + suffix;
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+function refade(el) {
+  el.classList.remove('fade-in');
+  void el.offsetWidth;
+  el.classList.add('fade-in');
+}
+
+/* ══ Cifre animate ══════════════════════════════════════════════════ */
+const STATS = [
+  { icon: 'package',   target: 8,  suffix: '',      label: 'module conectate într-o platformă' },
+  { icon: 'scan-line', target: 90, suffix: '%',     label: 'mai puțin introdus manual cu AI' },
+  { icon: 'clock',     target: 24, suffix: '/7',    label: 'acces la datele firmei, de oriunde' },
+  { icon: 'shield-check', target: 2, suffix: ' pași', label: 'autentificare securizată' },
+];
+const statsGrid = document.getElementById('statsGrid');
+statsGrid.innerHTML = STATS.map((s, i) =>
+  '<div class="stat-card" data-i="' + i + '"><span class="ic">' + icon(s.icon, 18) + '</span>' +
+  '<p class="stat-num">0' + s.suffix + '</p><p class="stat-label">' + s.label + '</p></div>'
+).join('');
+const statObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const s = STATS[+e.target.dataset.i];
+    animateCount(e.target.querySelector('.stat-num'), s.target, s.suffix);
+    statObserver.unobserve(e.target);
+  });
+}, { threshold: 0.5 });
+statsGrid.querySelectorAll('.stat-card').forEach(c => statObserver.observe(c));
+
+/* ══ Previzualizări (mini-aplicație) ════════════════════════════════ */
+function badge(tone, text) { return '<span class="badge badge-' + tone + '">' + text + '</span>'; }
+
+function ordersPreview() {
+  return [
+    ['CMR-2041', 'București → Viena', 'green', 'Livrat'],
+    ['CMR-2042', 'Cluj → München', 'amber', 'În tranzit'],
+    ['CMR-2043', 'Arad → Milano', 'gray', 'Planificat'],
+  ].map(([id, route, tone, label]) =>
+    '<div class="prev-row"><div style="min-width:0"><p class="prev-id">' + id + '</p><p class="prev-sub">' + route + '</p></div>' + badge(tone, label) + '</div>'
+  ).join('');
+}
+
+function invoicesPreview() {
+  return [
+    ['FAC-1203', '4.820,00 RON', 'green', 'Validat ANAF'],
+    ['FAC-1204', '2.150,00 EUR', 'indigo', 'Trimis'],
+    ['FAC-1205', '7.900,00 RON', 'amber', 'Ciornă'],
+  ].map(([id, sum, tone, label]) =>
+    '<div class="prev-row"><div style="min-width:0"><p class="prev-id">' + id + '</p><p class="prev-sub nums">' + sum + '</p></div>' + badge(tone, label) + '</div>'
+  ).join('');
+}
+
+function fleetPreview() {
+  return '<div class="fleet-grid">' + [
+    ['B 123 ABC', 'Disponibil', 'green'],
+    ['CJ 88 TRK', 'În service', 'amber'],
+    ['TM 10 LOG', 'Disponibil', 'green'],
+    ['AR 77 EUR', 'ITP expiră', 'amber'],
+  ].map(([plate, st, tone]) =>
+    '<div class="fleet-card"><div class="top">' + icon('truck', 13) + '<p class="plate">' + plate + '</p></div>' + badge(tone, st) + '</div>'
+  ).join('') + '</div>';
+}
+
+function docsPreview() {
+  const rows = [
+    ['Furnizor', 'Transporter SRL'],
+    ['CUI', 'RO12345678'],
+    ['Total', '3.410,00 RON'],
+    ['Scadență', '14.07.2026'],
+  ];
+  return '<div class="docs"><div class="docs-head"><span class="ic">' + icon('scan-line', 14) + '</span>' +
+    '<p class="fn">factura_furnizor.pdf</p>' + badge('green', 'Extras cu AI') + '</div>' +
+    rows.map(([k, v], i) =>
+      '<div class="kv" style="animation-delay:' + (i * 120) + 'ms"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>'
+    ).join('') + '</div>';
+}
+
+function yardPreview() {
+  const gates = [
+    { x: 22, y: 16, n: '1' }, { x: 41, y: 16, n: '2', occ: true }, { x: 60, y: 16, n: '3' }, { x: 79, y: 16, n: '4', occ: true },
+    { x: 22, y: 84, n: '5' }, { x: 41, y: 84, n: '6', occ: true }, { x: 60, y: 84, n: '7' }, { x: 79, y: 84, n: '8' },
+  ];
+  return '<div class="yard-wrap"><div class="yard-map"><div class="yard-hall"><p>Hala 1</p></div>' +
+    gates.map(g =>
+      '<div class="yard-gate' + (g.occ ? ' occ' : '') + '" style="left:' + g.x + '%;top:' + g.y + '%">' +
+      '<span class="yg-n">' + g.n + '</span><span class="yg-s">' + (g.occ ? 'Ocupat' : 'Liber') + '</span></div>'
+    ).join('') +
+    '</div><div class="yard-legend"><span class="yl-left">' + icon('truck', 12) + ' B 123 ABC · Gate 2 · Descărcare</span>' +
+    badge('indigo', '3/8 ocupate') + '</div></div>';
+}
+
+function dashPreview() {
+  const bars = [40, 65, 50, 80, 60, 95, 72];
+  return '<div class="dash"><div class="dash-stats">' +
+    [['Venit', '142k'], ['Curse', '318'], ['Profit', '+18%']].map(([k, v]) =>
+      '<div class="dash-stat"><p class="ds-v">' + v + '</p><p class="ds-k">' + k + '</p></div>'
+    ).join('') +
+    '</div><div class="dash-bars">' +
+    bars.map((h, i) => '<div class="dash-bar" style="height:' + h + '%;transition-delay:' + (i * 80) + 'ms"></div>').join('') +
+    '</div></div>';
+}
+
+/* ══ Taburi de funcții ══════════════════════════════════════════════ */
+const TABS = [
+  { key: 'orders', icon: 'package', label: 'Comenzi',
+    headline: 'Comenzi de transport, cap-coadă',
+    points: ['Rute cu multiple opriri și paleți', 'Status în timp real', 'Atașamente CMR & documente'],
+    preview: ordersPreview },
+  { key: 'invoices', icon: 'file-text', label: 'Facturi & e-Factura',
+    headline: 'Facturare cu e-Factura ANAF',
+    points: ['Facturi emise și primite', 'Trimitere și validare ANAF', 'Scadențe și status plată'],
+    preview: invoicesPreview },
+  { key: 'fleet', icon: 'truck', label: 'Flotă',
+    headline: 'Șoferi, camioane și remorci',
+    points: ['Interne și externe', 'Documente cu expirări (ITP, RCA, ATP…)', 'Costuri service și mentenanță'],
+    preview: fleetPreview },
+  { key: 'docs', icon: 'scan-line', label: 'Documente AI',
+    headline: 'Procesare automată a documentelor',
+    points: ['Extragere date din PDF/poze', 'Câmpuri completate automat', 'Mai puțin introdus manual'],
+    preview: docsPreview },
+  { key: 'yard', icon: 'warehouse', label: 'Yard',
+    headline: 'Curtea și rampele, pe o hartă live',
+    points: ['Hale configurabile, cu gate-uri așezate pe pereți', 'Asignezi camioane la încărcare/descărcare, cu dată și oră', 'Vezi live ce gate e liber și ce camion e la rampă'],
+    preview: yardPreview },
+  { key: 'dashboards', icon: 'bar-chart-3', label: 'Dashboard-uri',
+    headline: 'Decizii pe baza datelor',
+    points: ['Profitabilitate pe comenzi și camioane', 'Venituri și costuri', 'Tendințe pe perioade'],
+    preview: dashPreview },
+];
+
+let activeTab = 0, tabPaused = false, featInView = false;
+const tabRow = document.getElementById('tabRow');
+const tabText = document.getElementById('tabText');
+const previewHead = document.getElementById('previewHead');
+const previewBody = document.getElementById('previewBody');
+
+function renderTabs() {
+  tabRow.innerHTML = TABS.map((t, i) =>
+    '<button class="tab-btn' + (i === activeTab ? ' active' : '') + '" data-i="' + i + '">' +
+    icon(t.icon, 15) + ' ' + t.label +
+    (i === activeTab && !tabPaused ? '<span class="tab-progress"></span>' : '') +
+    '</button>'
+  ).join('');
+  tabRow.querySelectorAll('.tab-btn').forEach(b => {
+    b.addEventListener('click', () => { activeTab = +b.dataset.i; tabPaused = true; renderTabs(); renderTabContent(); });
+  });
+}
+
+function renderTabContent() {
+  const t = TABS[activeTab];
+  tabText.innerHTML = '<h3>' + t.headline + '</h3><ul class="points">' +
+    t.points.map(p => '<li><span class="pt-check">' + icon('check', 13) + '</span>' + p + '</li>').join('') + '</ul>';
+  refade(tabText);
+  previewHead.textContent = t.label;
+  previewBody.innerHTML = t.preview();
+  refade(previewBody);
+  if (t.key === 'dashboards') {
+    setTimeout(() => { const b = previewBody.querySelector('.dash-bars'); if (b) b.classList.add('run'); }, 60);
+  }
+}
+
+renderTabs();
+renderTabContent();
+
+new IntersectionObserver(([e]) => { featInView = e.isIntersecting; }, { threshold: 0.2 })
+  .observe(document.getElementById('functii'));
+
+setInterval(() => {
+  if (!featInView || tabPaused) return;
+  activeTab = (activeTab + 1) % TABS.length;
+  renderTabs();
+  renderTabContent();
+}, 4000);
+
+/* ══ Flux de lucru ══════════════════════════════════════════════════ */
+const FLOW = [
+  { icon: 'package', title: 'Comandă', accent: 'Primești comanda',
+    desc: 'Înregistrezi comanda de transport cu client, rută, opriri, marfă și preț — totul într-un singur loc.',
+    chips: ['Client & contact', 'Rută cu opriri', 'Preț & valută'] },
+  { icon: 'route', title: 'Planificare', accent: 'Aloci resursele',
+    desc: 'Aloci șofer, camion și remorcă din flota proprie sau de la parteneri și urmărești disponibilitatea.',
+    chips: ['Șofer & camion', 'Flotă proprie/parteneri', 'Documente valabile'] },
+  { icon: 'map-pin', title: 'Transport', accent: 'Urmărești cursa',
+    desc: 'Vezi statusul în timp real — planificat, în tranzit, livrat — cu CMR și documente atașate la comandă.',
+    chips: ['Status live', 'CMR atașat', 'Opriri urmărite'] },
+  { icon: 'file-text', title: 'Facturare', accent: 'Emiți factura',
+    desc: 'Generezi factura din comandă și o trimiți prin e-Factura către ANAF, cu validare automată.',
+    chips: ['Din comandă', 'e-Factura ANAF', 'Scadență setată'] },
+  { icon: 'wallet', title: 'Încasare', accent: 'Vezi profitul',
+    desc: 'Urmărești plățile și vezi profitabilitatea reală pe fiecare comandă și camion în dashboard-uri.',
+    chips: ['Status plată', 'Profit pe comandă', 'Rapoarte'] },
+];
+
+let flowStep = 0, flowPaused = false, fluxInView = false;
+const flowSteps = document.getElementById('flowSteps');
+const flowDetail = document.getElementById('flowDetail');
+const flowLineFill = document.getElementById('flowLineFill');
+
+function renderFlow() {
+  flowLineFill.style.width = (flowStep / (FLOW.length - 1)) * 100 + '%';
+  flowSteps.innerHTML = FLOW.map((s, i) => {
+    const done = i <= flowStep, isActive = i === flowStep;
+    return '<li><button class="flow-dot' + (isActive ? ' active' : done ? ' done' : '') + '" data-i="' + i + '" aria-label="' + s.title + '">' +
+      icon(s.icon, 18) + '</button><span class="flow-step-label' + (isActive ? ' active' : '') + '">' + (i + 1) + '. ' + s.title + '</span></li>';
+  }).join('');
+  flowSteps.querySelectorAll('.flow-dot').forEach(b => {
+    b.addEventListener('click', () => { flowStep = +b.dataset.i; flowPaused = true; renderFlow(); });
+  });
+
+  const a = FLOW[flowStep];
+  flowDetail.innerHTML =
+    '<div><span class="flow-accent">' + icon('zap', 13) + ' ' + a.accent + '</span>' +
+    '<h3>' + a.title + '</h3><p class="desc">' + a.desc + '</p>' +
+    '<div class="flow-chips">' + a.chips.map(c => '<span class="flow-chip">' + icon('check', 12) + ' ' + c + '</span>').join('') + '</div></div>' +
+    '<div class="flow-icon-panel"><div class="flow-icon-box">' + icon(a.icon, 34) + '</div></div>';
+  refade(flowDetail);
+}
+flowDetail.addEventListener('mouseenter', () => { flowPaused = true; });
+renderFlow();
+
+new IntersectionObserver(([e]) => { fluxInView = e.isIntersecting; }, { threshold: 0.3 })
+  .observe(document.getElementById('flux'));
+
+setInterval(() => {
+  if (!fluxInView || flowPaused) return;
+  flowStep = (flowStep + 1) % FLOW.length;
+  renderFlow();
+}, 3200);
+
+/* ══ Reputație ══════════════════════════════════════════════════════ */
+const REVIEWS = {
+  company: [
+    { subject: 'Trans Europa SRL', meta: 'CUI RO12345678', rating: 5, comment: 'Plăți la timp, comunicare excelentă pe toată cursa. Recomand colaborarea.', author: 'Logistic Pro SRL' },
+    { subject: 'Cargo Express SA', meta: 'CUI RO87654321', rating: 4, comment: 'Marfă livrată corect, documentație CMR completă. Mici întârzieri la confirmare.', author: 'Vela Trans SRL' },
+    { subject: 'RoadLine Logistics', meta: 'CUI RO55512300', rating: 5, comment: 'Parteneri serioși, comenzi bine organizate și prețuri corecte.', author: 'Danube Freight SRL' },
+  ],
+  driver: [
+    { subject: 'Ion P.', meta: 'Șofer', rating: 5, comment: 'Punctual și foarte atent cu marfa. Documente predate corect.', author: 'Logistic Pro SRL' },
+    { subject: 'Marius D.', meta: 'Șofer', rating: 4, comment: 'Cursă fără probleme, comunicare bună pe traseu.', author: 'Vela Trans SRL' },
+    { subject: 'Andrei V.', meta: 'Șofer', rating: 5, comment: 'Respectă programul de livrare, atitudine profesionistă.', author: 'Danube Freight SRL' },
+  ],
+};
+const REV_NOTES = {
+  company: 'Recenziile despre firme sunt atestate de partenerii cu care au lucrat efectiv. Fiecare firmă răspunde pentru propria evaluare. Vizibile doar după autentificare.',
+  driver: 'Recenziile despre șoferi sunt minimale și fără date sensibile — nume, notă (1–5) și un comentariu factual. Fără CNP, CI sau telefon. Vizibile doar firmelor autentificate.',
+};
+
+let revKind = 'company';
+const revToggle = document.getElementById('revToggle');
+const revAvg = document.getElementById('revAvg');
+const revCards = document.getElementById('revCards');
+const revNote = document.getElementById('revNote');
+
+function renderReviews() {
+  revToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.kind === revKind));
+  const list = REVIEWS[revKind];
+  const avg = (list.reduce((s, r) => s + r.rating, 0) / list.length).toFixed(1);
+  revAvg.innerHTML = '<span class="rev-avg-num">' + avg + '</span><div>' + stars(Math.round(+avg)) +
+    '<p class="rev-avg-sub">media pe ' + (revKind === 'company' ? 'firme' : 'șoferi') + ' evaluați</p></div>';
+  revCards.innerHTML = list.map(r =>
+    '<div class="rev-card"><div class="head"><div style="min-width:0"><p class="subject">' + r.subject + '</p>' +
+    '<p class="meta">' + r.meta + '</p></div><span class="quote-ic">' + icon('quote', 18) + '</span></div>' +
+    '<div style="margin-top:8px">' + stars(r.rating) + '</div>' +
+    '<p class="comment">' + r.comment + '</p>' +
+    '<div class="foot"><span class="avatar">' + r.author.charAt(0) + '</span>' +
+    '<p class="by">recenzie de la <b>' + r.author + '</b></p></div></div>'
+  ).join('');
+  refade(revCards);
+  revNote.textContent = REV_NOTES[revKind];
+}
+revToggle.querySelectorAll('button').forEach(b => {
+  b.addEventListener('click', () => { revKind = b.dataset.kind; renderReviews(); });
+});
+renderReviews();
+
+/* ══ Module ═════════════════════════════════════════════════════════ */
+const MODULES = [
+  { icon: 'package', title: 'Comenzi', desc: 'Comenzi de transport cu rute, opriri și documente.' },
+  { icon: 'file-text', title: 'Facturi & e-Factura', desc: 'Facturi emise/primite cu integrare ANAF.' },
+  { icon: 'truck', title: 'Flotă', desc: 'Șoferi, camioane, remorci — proprii și ai partenerilor.' },
+  { icon: 'scan-line', title: 'Documente AI', desc: 'Extragere automată de date din documente.' },
+  { icon: 'bar-chart-3', title: 'Dashboard-uri', desc: 'Profitabilitate pe comenzi și camioane.' },
+  { icon: 'warehouse', title: 'Yard', desc: 'Harta halelor cu gate-uri și camioane asignate la rampă.' },
+  { icon: 'users', title: 'Parteneri', desc: 'Clienți și furnizori, cu istoric și contacte.' },
+  { icon: 'star-fill', title: 'Reputație', desc: 'Recenzii despre firme partenere și șoferi.' },
+];
+document.getElementById('modulesGrid').innerHTML = MODULES.map(m =>
+  '<div class="module-card"><div class="module-icon">' + icon(m.icon, 18) + '</div>' +
+  '<h3>' + m.title + '</h3><p>' + m.desc + '</p></div>'
+).join('');
+
+/* ══ Legal: banner cookie + modale ══════════════════════════════════ */
+const COOKIE_KEY = 'thlink_cookie_consent';
+const LEGAL = {
+  cookie: {
+    title: 'Politica de cookie-uri',
+    intro: 'Folosim cookie-uri pentru ca platforma să funcționeze corect și pentru a-ți îmbunătăți experiența.',
+    sections: [
+      { h: 'Cookie-uri strict necesare', p: 'Sunt esențiale pentru autentificare, securitate (sesiune, token de reîmprospătare) și funcționarea de bază a aplicației. Fără ele nu te poți autentifica. Acestea nu pot fi dezactivate.' },
+      { h: 'Cookie-uri de preferințe', p: 'Rețin alegeri precum firma selectată sau opțiunile de afișare, ca să nu le reintroduci la fiecare vizită.' },
+      { h: 'Cum le gestionezi', p: 'Îți poți seta browserul să blocheze sau să șteargă cookie-urile. Dezactivarea celor strict necesare poate împiedica autentificarea și folosirea platformei.' },
+    ],
+  },
+  privacy: {
+    title: 'Politica de confidențialitate',
+    intro: 'Prelucrăm datele tale doar pentru a-ți oferi serviciile platformei THLink, în conformitate cu GDPR.',
+    sections: [
+      { h: 'Ce date colectăm', p: 'Date de cont (nume, email), datele firmei și datele operaționale pe care le introduci (comenzi, facturi, flotă, parteneri).' },
+      { h: 'Cum le folosim', p: 'Pentru a furniza funcționalitățile platformei, pentru securitate și pentru a respecta obligațiile legale (ex. e-Factura ANAF).' },
+      { h: 'Securitate', p: 'Datele sunt separate pe firmă, accesul este protejat cu autentificare în 2 pași, iar parolele sunt stocate criptat.' },
+      { h: 'Drepturile tale', p: 'Ai dreptul de acces, rectificare, ștergere și portabilitate a datelor. Pentru solicitări, scrie la support@thlink.ro.' },
+    ],
+  },
+  terms: {
+    title: 'Termeni și condiții',
+    intro: 'Prin utilizarea platformei THLink ești de acord cu termenii de mai jos.',
+    sections: [
+      { h: 'Utilizarea serviciului', p: 'Contul îți este oferit pentru gestionarea activității firmei tale de transport. Ești responsabil pentru păstrarea în siguranță a datelor de autentificare.' },
+      { h: 'Datele tale', p: 'Datele introduse rămân ale firmei tale. Le procesăm strict pentru a-ți furniza serviciul.' },
+      { h: 'Disponibilitate', p: 'Depunem eforturi pentru o disponibilitate ridicată, dar serviciul poate fi indisponibil temporar pentru mentenanță sau din cauze independente de noi.' },
+      { h: 'Contact', p: 'Pentru orice întrebare legată de termeni, scrie la support@thlink.ro.' },
+    ],
+  },
+};
+
+const modalRoot = document.getElementById('modalRoot');
+
+function openLegal(key) {
+  const d = LEGAL[key];
+  modalRoot.innerHTML =
+    '<div class="modal-overlay" id="legalOverlay">' +
+    '<div class="modal-box">' +
+    '<div class="modal-head"><h3>' + d.title + '</h3>' +
+    '<button class="modal-close" onclick="closeLegal()" aria-label="Închide">' + icon('x', 20) + '</button></div>' +
+    '<div class="modal-body"><p class="intro">' + d.intro + '</p>' +
+    d.sections.map(s => '<div class="sec"><h4>' + s.h + '</h4><p>' + s.p + '</p></div>').join('') +
+    '<p class="updated">Ultima actualizare: ' + new Date().toLocaleDateString('ro-RO') + '</p></div>' +
+    '<div class="modal-foot"><button class="btn btn-dark" onclick="closeLegal()">Am înțeles</button></div>' +
+    '</div></div>';
+  document.getElementById('legalOverlay').addEventListener('click', e => {
+    if (e.target.id === 'legalOverlay') closeLegal();
+  });
+  document.querySelector('#legalOverlay .modal-box').addEventListener('click', e => e.stopPropagation());
+}
+function closeLegal() { modalRoot.innerHTML = ''; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
+
+/* banner cookie — se afișează până la prima acceptare */
+const cookieRoot = document.getElementById('cookieRoot');
+function showCookieBanner() {
+  cookieRoot.innerHTML =
+    '<div class="cookie-banner"><div class="cookie-inner">' +
+    '<div class="cookie-text"><span class="cookie-ic">' + icon('cookie', 18) + '</span>' +
+    '<p>Folosim cookie-uri strict necesare pentru autentificare și securitate, plus cookie-uri de preferințe. ' +
+    '<button class="link" onclick="openLegal(\'cookie\')">Vezi politica de cookie-uri</button>.</p></div>' +
+    '<button class="btn btn-dark" id="cookieAccept">Accept</button>' +
+    '</div></div>';
+  document.getElementById('cookieAccept').addEventListener('click', () => {
+    try { localStorage.setItem(COOKIE_KEY, new Date().toISOString()); } catch (e) { /* ignorat */ }
+    cookieRoot.innerHTML = '';
+  });
+}
+try {
+  if (!localStorage.getItem(COOKIE_KEY)) showCookieBanner();
+} catch (e) { showCookieBanner(); }
+
+/* anul curent în footer */
+document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
