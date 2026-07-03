@@ -5,28 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>THLink — Tot transportul tău, într-un singur loc</title>
 <meta name="description" content="Comenzi, facturi cu e-Factura, flotă și documente procesate cu AI — organizate, conectate și ușor de urmărit.">
-<!--
-  ════════════════════════════════════════════════════════════════════
-  THLink — pagina de prezentare (HTML + CSS + JS, un singur fișier)
-
-  Ce poți personaliza rapid:
-   • Linkul de autentificare:  caută  https://app.thlink.ro/login
-   • Numărul de telefon:       caută  tel:+40000000000
-   • Poza reală de camion:     pune un fișier  hero-truck.png  lângă
-     acest HTML (vedere laterală, fundal transparent) — se afișează
-     automat în locul siluetei desenate.
-   • Logo: e încorporat direct în fișier (base64) — dacă vrei să-l
-     schimbi, caută  const LOGO  în partea de JavaScript.
-   • Emailul pe care primești mesajele din formularul de contact:
-     caută  const CONTACT_EMAIL  în partea de JavaScript. La primul
-     mesaj trimis, FormSubmit îți dă un email de confirmare — apasă
-     „Activate" o singură dată și după aceea totul merge automat.
-  ════════════════════════════════════════════════════════════════════
--->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ── Reset & bază ─────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#111827;background:#fff;line-height:1.5;-webkit-font-smoothing:antialiased}
@@ -334,7 +315,6 @@ section[id]{scroll-margin-top:88px}
       </nav>
       <div class="header-actions">
         <a href="tel:+40000000000" class="phone-btn" aria-label="Sună-ne"><i data-icon="phone" data-size="15"></i></a>
-        <a href="https://app.thlink.ro/login" class="btn btn-white btn-sm">Autentificare</a>
         <a href="#contact" class="btn btn-lime btn-sm">Contact</a>
       </div>
     </div>
@@ -387,7 +367,7 @@ section[id]{scroll-margin-top:88px}
           <h1>Tot transportul tău,<br>într-un singur loc</h1>
           <p>Comenzi, facturi cu e-Factura, flotă și documente procesate cu AI — organizate, conectate și ușor de urmărit.</p>
           <div class="hero-ctas">
-            <a href="https://app.thlink.ro/login" class="btn btn-white">Intră în cont <i data-icon="arrow-right" data-size="16"></i></a>
+            <a href="#contact" class="btn btn-white">Contactează-ne <i data-icon="arrow-right" data-size="16"></i></a>
             <a href="#flux" class="btn btn-ghost">Vezi cum funcționează</a>
           </div>
         </div>
@@ -486,7 +466,6 @@ section[id]{scroll-margin-top:88px}
           <a href="tel:+40000000000" class="contact-line"><i data-icon="phone" data-size="16"></i> +40 000 000 000</a>
           <a href="#" class="contact-line" data-contact-mail></a>
         </div>
-        <a href="https://app.thlink.ro/login" class="btn btn-ghost" style="margin-top:28px">Ai deja cont? Autentificare <i data-icon="arrow-right" data-size="16"></i></a>
       </div>
       <form id="contactForm" class="contact-form" novalidate>
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
