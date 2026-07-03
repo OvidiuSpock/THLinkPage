@@ -271,6 +271,16 @@ section[id]{scroll-margin-top:88px}
 .cf-status.ok{color:#a3e635}
 .cf-status.err{color:#fca5a5}
 
+/* ── Pe o singură coloană (mobil/tabletă) totul se centrează ───────── */
+@media(max-width:1023px){
+  .feature-text{text-align:center}
+  .feature-text .points{display:inline-flex;text-align:left}
+  .flow-detail>div:first-child{text-align:center}
+  .flow-chips{justify-content:center}
+  .contact-info{text-align:center}
+  .contact-lines{align-items:center}
+}
+
 /* ── Footer ───────────────────────────────────────────────────────── */
 .site-footer{padding:24px 20px;border-top:1px solid #e5e7eb}
 @media(min-width:640px){.site-footer{padding:24px 32px}}
